@@ -16,6 +16,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: PATH
+      run: echo "{path}" >> $GITHUB_PATH
     - name: CD
       run: cd ~/text_editor
     - name: Build

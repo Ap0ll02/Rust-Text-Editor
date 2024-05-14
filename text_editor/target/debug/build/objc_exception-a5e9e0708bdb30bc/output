@@ -38,4 +38,4 @@ HOST_ARFLAGS = None
 cargo:rerun-if-env-changed=ARFLAGS
 ARFLAGS = None
 cargo:rustc-link-lib=static=exception
-cargo:rustc-link-search=native=/Users/apollo/Documents/Code/TextEditorProject/Rust Text Editor/text_editor/target/debug/build/objc_exception-a5e9e0708bdb30bc/out
+cargo:rustc-link-search=native=/Volumes/Hermes/Olympus/Poseidon/Rust-Text-Editor/text_editor/target/debug/build/objc_exception-a5e9e0708bdb30bc/out

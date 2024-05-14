@@ -1,33 +1,25 @@
-// Crate Use Statements
-use iced::widget::{button, column, text, text_editor, Container};
-use iced::{Alignment, Element, Sandbox, Settings};
-use std::fs::File;
-// // Running The Application. Giving The Window A Name "Scribe"
+use iced::widget::{text, container, text_editor};
+use iced::{Theme, Element, Sandbox, Settings};
+
 pub fn main() -> iced::Result {
-    // iced::run("Text Editor", iced::Settings::default())
-    TextState::run(Settings::default())
+    Editor::run(Settings::default())
 }
 
-// A Text Editor Program: But First Testing The ICED Library With A Simple Text Layout
-#[derive(Default)]
-struct TextState {
-    value: String,
+struct Editor {
+    content: text_editor::Content,
 }
 
-// Message, or event options for Event Based Programming architecture used in this library
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 enum Message {
-    NewFile,
-    FileName,
+    Edit(text_editor::Action),
 }
 
-// Sandbox app to run the game state
-impl Sandbox for TextState {
+impl Sandbox for Editor {
     type Message = Message;
 
     fn new() -> Self {
         Self {
-            value: "Welcome To Muse".to_string(),
+            content: text_editor::Content::new(),
         }
     }
 
@@ -37,47 +29,19 @@ impl Sandbox for TextState {
 
     fn update(&mut self, message: Message) {
         match message {
-            Message::NewFile => {}
+            Message::Edit(action) => {
+                self.content.perform(action);
+            }
         }
     }
 
-    fn view(&self) -> Element<Message> {
-        let ui = column![text(self.value.clone()).size(50),]
-            .padding(40)
-            .align_items(Alignment::Center);
-        let container = Container::new(ui)
-            .center_x()
-            .center_y()
-            .width(iced::Length::Fill)
-            .height(iced::Length::Fill)
-            .into();
-        container
+    fn view(&self) -> Element<'_, Message> {
+        let input = text_editor(&self.content).on_action(Message::Edit);
+        container(input).padding(15).into()
+
     }
 
-    fn theme(&self) -> iced::Theme {
-        iced::Theme::default()
+    fn theme(&self) -> Theme {
+        Theme::Dracula
     }
-
-    fn style(&self) -> iced::theme::Application {
-        iced::theme::Application::default()
-    }
-
-    fn scale_factor(&self) -> f64 {
-        1.0
-    }
-
-    fn run(settings: Settings<()>) -> Result<(), iced::Error>
-    where
-        Self: 'static + Sized,
-    {
-        <Self as iced::Application>::run(settings)
-    }
-}
-
-// Test to ensure the message/interaction is changing the state.
-#[test]
-fn it_prints() {
-    let mut label = TextState::default();
-    label.update(Message::DName);
-    assert_eq!(label.value, "Welcome To Muse Editor, Jack.".to_string())
 }

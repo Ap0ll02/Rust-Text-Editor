@@ -1,6 +1,7 @@
 use iced::widget::{button, column, container, horizontal_space, row, text, text_editor};
 use iced::{executor, Application, Command, Element, Length, Settings, Theme};
 use std::io;
+use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 pub fn main() -> iced::Result {
@@ -98,8 +99,8 @@ async fn pick_file() -> Result<(PathBuf, Arc<String>), Error> {
 }
 
 async fn load_file(path: PathBuf) -> Result<(PathBuf, Arc<String>), Error> {
-    let contents = tokio::fs::read_to_string(&path)
-        .await
+    // let contents = tokio::fs::read_to_string(&path)
+       let contents = fs::read_to_string(&path)
         .map(Arc::new)
         .map_err(|error| error.kind())
         .map_err(Error::IO)?;

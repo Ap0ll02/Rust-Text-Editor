@@ -1,5 +1,5 @@
-use iced::widget::{button, column, container, horizontal_space, row, text, text_editor};
-use iced::{executor, Application, Command, Element, Font, Length, Settings, Theme};
+use iced::widget::{button, column, container, horizontal_space, row, text, text_editor, tooltip};
+use iced::{executor, theme, Application, Command, Element, Font, Length, Settings, Theme};
 use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
@@ -91,9 +91,9 @@ impl Application for Editor {
 
     fn view(&self) -> Element<'_, Message> {
         let controls = row![
-            action(new_icon(), Message::New),
-            action(open_icon(), Message::Open),
-            action(save_icon(), Message::Save),
+            action(new_icon(), "New File", Message::New),
+            action(open_icon(), "Open File", Message::Open),
+            action(save_icon(), "Save File", Message::Save),
         ]
         .spacing(10)
         .align_items(iced::Alignment::Center);
@@ -141,11 +141,20 @@ fn icon<'a>(codepoint: char) -> Element<'a, Message> {
     text(codepoint).font(ICON_FONT).into()
 }
 
-fn action<'a>(content: Element<'a, Message>, on_press: Message) -> Element<'a, Message> {
-    button(container(content).width(42).center_x().center_y())
-        .on_press(on_press)
-        .padding([5, 10])
-        .into()
+fn action<'a>(
+    content: Element<'a, Message>,
+    label: &'a str,
+    on_press: Message,
+) -> Element<'a, Message> {
+    tooltip(
+        button(container(content).width(42).center_x().center_y())
+            .on_press(on_press)
+            .padding([5, 10]),
+        label,
+        tooltip::Position::FollowCursor,
+    )
+    .style(theme::Container::Box)
+    .into()
 }
 
 fn default_file() -> PathBuf {

@@ -3,6 +3,12 @@
 I am making this app to try and build some GUI skills, along with Rust skills.
 
 ## Progress:
-- Currently have a running multi line text box that takes user text.
-- Needs to have file io operations to save work, and opening ability.
-- UI Improvements needed as well
+- Command + S for saving is currently not working (could be a fault of the library)
+- CTRL + S saving **is currently working**
+
+## Highlights
+Following the tutorial so far:
+- Syntax highlighting
+- Tooltip messages
+- Theme selection
+are 3 features that are my favorite of the editor so far.

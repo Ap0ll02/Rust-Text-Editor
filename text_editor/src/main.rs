@@ -10,9 +10,12 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
+
+// My Excellent Main Function
 pub fn main() -> iced::Result {
     Editor::run(Settings {
         default_font: Font::MONOSPACE,
+
         fonts: vec![include_bytes!("../fonts/editor-icons.ttf")
             .as_slice()
             .into()],
@@ -20,6 +23,7 @@ pub fn main() -> iced::Result {
     })
 }
 
+// Creating The Application Struct, Essentially Contains All Important Variables
 struct Editor {
     path: Option<PathBuf>,
     content: text_editor::Content,
@@ -28,6 +32,8 @@ struct Editor {
     is_dirty: bool,
 }
 
+// These are events, and get handled in the code, think of polling for events
+// and these are the different event types.
 #[derive(Debug, Clone)]
 enum Message {
     Edit(text_editor::Action),
@@ -57,7 +63,6 @@ impl Application for Editor {
             Command::perform(load_file(default_file()), Message::FileOpened),
         )
     }
-
     fn title(&self) -> String {
         String::from("Muse Editor 1.0")
     }
@@ -111,7 +116,7 @@ impl Application for Editor {
 
     fn subscription(&self) -> Subscription<Message> {
         keyboard::on_key_press(|key, modifiers| match key.as_ref() {
-            keyboard::Key::Character("s") if modifiers.command() => Some(Message::Save),
+            keyboard::Key::Character("s") if modifiers.control() => Some(Message::Save),
             _ => None,
         })
     }

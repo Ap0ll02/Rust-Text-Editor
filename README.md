@@ -11,4 +11,5 @@ Following the tutorial so far:
 - Syntax highlighting
 - Tooltip messages
 - Theme selection
+
 are 3 features that are my favorite of the editor so far.

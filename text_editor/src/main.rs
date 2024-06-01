@@ -29,6 +29,7 @@ struct Editor {
     content: text_editor::Content,
     error: Option<Error>,
     theme: highlighter::Theme,
+    editor_theme: theme::Theme,
     is_dirty: bool,
 }
 
@@ -43,6 +44,7 @@ enum Message {
     FileSave(Result<PathBuf, Error>),
     FileOpened(Result<(PathBuf, Arc<String>), Error>),
     ThemeSelected(highlighter::Theme),
+    EThemeSelected(theme::Theme),
 }
 
 impl Application for Editor {
@@ -59,6 +61,7 @@ impl Application for Editor {
                 error: None,
                 theme: highlighter::Theme::SolarizedDark,
                 is_dirty: true,
+                editor_theme: theme::Theme::Dracula,
             },
             Command::perform(load_file(default_file()), Message::FileOpened),
         )
@@ -111,6 +114,10 @@ impl Application for Editor {
                 self.theme = theme;
                 Command::none()
             }
+            Message::EThemeSelected(theme) => {
+                self.editor_theme = theme;
+                Command::none()
+            }
         }
     }
 
@@ -135,6 +142,11 @@ impl Application for Editor {
                 highlighter::Theme::ALL,
                 Some(self.theme),
                 Message::ThemeSelected
+            ),
+            pick_list(
+                theme::Theme::ALL,
+                Some(self.editor_theme.clone()),
+                Message::EThemeSelected
             ),
         ]
         .spacing(10)
@@ -175,11 +187,7 @@ impl Application for Editor {
     }
 
     fn theme(&self) -> Theme {
-        if self.theme.is_dark() {
-            Theme::Dracula
-        } else {
-            Theme::Light
-        }
+        self.editor_theme.clone()
     }
 }
 
